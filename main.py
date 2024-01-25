@@ -1,8 +1,16 @@
 import os
 import sys
+from dotenv import load_dotenv
+from pathlib import Path
 
 from taipy.gui import Gui, State, notify
 import openai
+
+dotenv_path = Path('./.env')
+load_dotenv(dotenv_path=dotenv_path)
+
+openai.api_key = os.getenv("OPENAI_API_KEY")
+os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY") 
 
 client = None
 context = "The following is a conversation with an AI assistant. The assistant is helpful, creative, clever, and very friendly.\n\nHuman: Hello, who are you?\nAI: I am an AI created by OpenAI. How can I help you today? "
@@ -186,15 +194,16 @@ page = """
 """
 
 if __name__ == "__main__":
-    if "OPENAI_API_KEY" in os.environ:
-        api_key = os.environ["OPENAI_API_KEY"]
-    elif len(sys.argv) > 1:
-        api_key = sys.argv[1]
-    else:
-        raise ValueError(
-            "Please provide the OpenAI API key as an environment variable OPENAI_API_KEY or as a command line argument."
-        )
-
+    # if "OPENAI_API_KEY" in os.environ:
+    #     api_key = os.environ["OPENAI_API_KEY"]
+    # elif len(sys.argv) > 1:
+    #     api_key = sys.argv[1]
+    # else:
+    #     raise ValueError(
+    #         "Please provide the OpenAI API key as an environment variable OPENAI_API_KEY or as a command line argument."
+    #     )
+    print(os.environ["OPENAI_API_KEY"])
+    api_key = os.environ["OPENAI_API_KEY"]
     client = openai.Client(api_key=api_key)
 
     Gui(page).run(debug=True, dark_mode=True, use_reloader=True)
